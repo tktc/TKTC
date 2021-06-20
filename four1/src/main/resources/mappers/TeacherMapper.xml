@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.mapper.TeacherMapper" >
+  <resultMap id="BaseResultMap" type="com.ssm.model.Teacher" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="professional" property="professional" jdbcType="VARCHAR" />
+    <result column="salary" property="salary" jdbcType="INTEGER" />
+    <association property="course" javaType="com.ssm.model.Course">
+      <id column="cid" property="id"/>
+      <result column="cname" property="name"></result>
+    </association>
+  </resultMap>
+  <select id="list" resultMap="BaseResultMap">
+    select t.*,c.id cid, c.name cname
+    from teacher t, course c
+    where t.course_id = c.id
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from teacher
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ssm.model.Teacher" >
+    insert into teacher (Id, name, password, 
+      sex, birthday, course_id, 
+      professional, salary)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=INTEGER}, #{birthday,jdbcType=VARCHAR}, #{courseId,jdbcType=INTEGER}, 
+      #{professional,jdbcType=VARCHAR}, #{salary,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.ssm.model.Teacher" >
+    update teacher
+    set name = #{name,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      birthday = #{birthday,jdbcType=VARCHAR},
+      course_id = #{courseId,jdbcType=INTEGER},
+      professional = #{professional,jdbcType=VARCHAR},
+      salary = #{salary,jdbcType=INTEGER}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select Id, name, password, sex, birthday, course_id, professional, salary
+    from teacher
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select Id, name, password, sex, birthday, course_id, professional, salary
+    from teacher
+  </select>
+</mapper>

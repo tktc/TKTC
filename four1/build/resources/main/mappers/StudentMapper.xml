@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.mapper.StudentMapper" >
+  <resultMap id="BaseResultMap" type="com.ssm.model.Student" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="clazz" property="clazz" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <collection property="scores" ofType="com.ssm.model.Score">
+      <result column="course_id" jdbcType="INTEGER" property="courseId"/>
+      <result column="score" jdbcType="DOUBLE" property="score"/>
+      <association property="course" javaType="com.ssm.model.Course">
+        <result column="cname" property="name"></result>
+      </association>
+    </collection>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from student
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ssm.model.Student" >
+    insert into student (Id, name, password, 
+      sex, clazz, birthday, 
+      image)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=INTEGER}, #{clazz,jdbcType=VARCHAR}, #{birthday,jdbcType=VARCHAR}, 
+      #{image,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.ssm.model.Student" >
+    update student
+    set name = #{name,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      clazz = #{clazz,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select Id, name, password, sex, clazz, birthday, image
+    from student
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select Id, name, password, sex, clazz, birthday, image
+    from student
+  </select>
+</mapper>
